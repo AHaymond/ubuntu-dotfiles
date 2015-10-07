@@ -1,5 +1,3 @@
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 ##
 # Git shell prompt
 ##
@@ -11,7 +9,7 @@ function parse_git_dirty {
 }
 
 # Set brew bin to PATH so it is checked before /usr/bin
-# export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 
 ##
 # Shell colors
@@ -43,7 +41,7 @@ export LSCOLORS="gxfxcxdxbxegedabagacad"
 ####################################
 ## File listing aliases
 ####################################
-alias ls='ls -G'
+alias ls='ls -G --color=auto'
 alias ll='ls -lahF'
 alias l='ls -l'
 ####################################
@@ -115,10 +113,37 @@ ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in Ma
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 vim_date () { cd ~/masteryconnect/notes && vim $( date '+%Y-%m-%d' ).markdown; }
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+### functions ####
+
+# export GREP_OPTIONS='--color=always'
+
+# alias grep="/bin/grep $GREP_OPTIONS"
+# unset GREP_OPTIONS
+
+####################################
+## functions
+####################################
+greps () {
+  grep -iRan $1 $2 | less -R
+}
+
+work() {
+  cd ~/Projects/masteryconnect
+  loc=`pwd`
+  name=${loc##*/}
+
+  if ! tmux has-session -t "$name"; then
+    tmux new-session -d -s "$name"
+    tmux send-keys 'vim' C-m
+    tmux split-window -v -c "$loc"
+    tmux send-prefix t
+  fi
+  tmux attach -t "$name"
+}
 
 include $HOME/.aws_creds
 
 ### Include custom files
 include $HOME/.api_tokens
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"

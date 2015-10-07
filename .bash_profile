@@ -1,8 +1,25 @@
-if [ -f /etc/profile ]; then
-  PATH=""
-  source /etc/profile
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
 fi
-#export PATH=/usr/local/bin:$PATH
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
 
 export GREP_OPTIONS='--color=always'
 
@@ -46,26 +63,3 @@ include() {
   [[ -f "$1" ]] && source "$1"
 }
 
-# OPATH=$PATH
-
-# if [ -z "$BASH" ]
-#   then typeset -A FOO # ksh93
-#   else declare -A FOO # bash
-# fi
-# OIFS=$IFS
-# IFS=':'
-# for A in ${PATH}
-# do
-#   [ -z "${FOO[${A}]}" ] || continue
-
-#   # By this point no dupe was found
-#   FOO[${A}]=${#FOO[*]}
-
-#   # Reconstruct the $PATH
-#   if [ -z "$RET_VAL" ]
-#     then RET_VAL="$A"
-#     else RET_VAL="${RET_VAL}:${A}"
-#   fi
-# done
-# IFS=$OIFS
-# echo $RET_VAL
